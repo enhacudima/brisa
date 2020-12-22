@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Report Movimentos Produtos')
+@section('title', 'BM | Report Movimentos Produtos')
 
 @section('content_header')
     <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -20,13 +21,11 @@
     </div>
 
     <div class="panel-body">
-<div class="row">
-    
 
         <form id="myForm" name="myForm" action="{{url('/report_movimetos_filter')}}" method="post">
                 @csrf
                 {{ csrf_field() }}
-        <div class="">
+    <div class="">
         <div class="form-group col-sm-2">
                 <label >Data Inicio</label>
               
@@ -44,7 +43,7 @@
         </div>
 
         <div class="form-group  col-sm-2 col-sm-offset-1">
-           
+            <label >Data
             <label class="container">Data do Movimento
               <input type="radio" checked="checked" value="movimento" id="radio" name="radio">
               <span class="checkmark"></span>
@@ -52,12 +51,13 @@
             <label class="container">Data do Ajuste
               <input type="radio" value="ajuste" id="radio" name="radio">
               <span class="checkmark"></span>
+            </label>    
             </label>             
         </div>
         </div>
 
-        <div class="form-group  col-sm-2 col-sm-offset-1">
-        <p class="submit">
+        <div class="">
+        <p class="submit col">
             <strong>
             <button type="submit" class="btnEmidio btn btn-primary bord0" value="1" id="gravar">Atualizar </button>
             </strong>
@@ -72,7 +72,7 @@
 
     </form> 
 
-  </div>  
+    
 
     <div class="col-lg-12">
     <div class="panel panel-default">
@@ -90,8 +90,8 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Produto</th>
-                <th scope="col">Lot</th>
-                <th scope="col">Estado</th>
+                <th scope="col">Lot Entradas</th>
+                <th scope="col">Lot Ajuste</th>
                 <th scope="col">Preço Únitario</th>
                 <th scope="col">Total Entrada (unidade)</th>
                 <th scope="col">Total Ajuste (unidade)</th>
@@ -102,32 +102,21 @@
             <tbody>
             @if(isset($movimentos))  
             @php($i=0)  
-            @foreach($movimentos as $key => $cil)
+            @foreach($movimentos as $cil)
                 <tr>
-                 <td>{{++$key}}</td>
-                 <td>
-                    <a class="btn btn btn-success btn-xs" href="{{action('ProdutoController@show', $cil->produto_id)}}">
-                        <i class="fa fa-pencil fa-fw"></i> {{$cil->name}}
-                    </a>
-                </td>
-                <td>
-                 <a class="btn btn btn-primary btn-xs" href="{{action('ProdutoController@lotshow', $cil->id)}}">
-                    <i class="fa fa-pencil fa-fw"></i> {{$cil->entrada_lot}}
+                 <td>{{$cil->id}}</td>
+                 <td>             <a class="btn btn btn-success btn-xs" href="{{action('ProdutoController@show', $cil->id)}}">
+                    <i class="fa fa-pencil fa-fw"></i> {{$cil->name}}
                  </a>
-                </td> 
-                
-                @if($cil->status==1)
-                    <td><span class="label label-success">Activado</span></td>
-                 @else
-                    <td><span class="label label-warning">Desativado</span></td>
-                 @endif
-                
-                <td>{{number_format($cil->entrada_preco, 2, ".", "")}}MTN</td> 
+                </td>
+                <td>{{$cil->entrada_lot}}</td> 
+                <td>{{$cil->lot}}</td> 
+                <td>{{$cil->entrada_preco}}MTN</td> 
                 <td>{{$cil->total_entrada}}</td>
-                <td>{{$cil->total_saida}}</td>
-                <td>{{$cil->total_entrada - $cil->total_saida}}</td>
-                <td>{{number_format($cil->entrada_preco * $cil->total_saida, 2, ".", "")}}</td>
-                @php($i=$cil->entrada_preco * $cil->total_saida+$i)
+                <td>{{$cil->total_ajuste}}</td>
+                <td>{{$cil->total_entrada - $cil->total_ajuste}}</td>
+                <td>{{number_format($cil->entrada_preco * $cil->total_ajuste, 2, ".", "")}}</td>
+                @php($i=$cil->entrada_preco * $cil->total_ajuste+$i)
                 </tr>
             @endforeach 
                 <tr>

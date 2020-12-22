@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Cadastro de Mesa Update')
+@section('title', 'BM | Cadastro de Mesa Update')
 
 @section('content_header')
     <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -15,7 +16,7 @@
     <div class="panel panel-default">
 
     <div class="panel-heading">
-        <h4>Sala: {{$mesa->name}}
+        <h4>Mesa: {{$mesa->name}}
         </h4>
     </div>
 
@@ -28,14 +29,14 @@
             <input   name="id" type="hidden" id="id" value="{{ $mesa->id }}" required autofocus>
             <div class="row">
                     <div class="from-group col-lg-12">
-                        <label>Nome</label>
+                        <label>Name</label>
                         <input type="text" name="name" id="name" class="form-control" value="{{$mesa->name}}" required autofocus>
                     </div>
             </div>        
 
             <div class="row">
                     <div class="from-group col-lg-12">
-                       <label><a href="#" data-toggle="tooltip" title="Escreva banho caso seja Sala-de-Banho/consultorio">Descrição</a></label>
+                       <label><a href="#" data-toggle="tooltip" title="escreva car caso seja car-wash ">Descrição</a></label>
                         <input type="text" name="description" id="description" class="form-control" value="{{$mesa->description}}" required autofocus>
                     </div>
             </div>       

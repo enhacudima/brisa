@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', ' | Home')
+@section('title', 'BMVendas | Home')
 
 @section('content_header')
      
@@ -9,8 +9,6 @@
 @section('content')
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<div class="row">
-  
 
 	@if($mesa)
 		@foreach($mesa as $key => $cil)
@@ -19,24 +17,20 @@
                   <!-- Small boxes (Stat box) -->
 
             <!-- small box -->
-            <div class="small-box bg-gray">
+            <div class="small-box bg-blue">
               <div class="inner">
                 @if($cil->status==0)
                 
-                  @if($cil->description=="banho")
+                  @if($cil->description=="car")
                   <h3 style="" ><a  href="{{url('carindex',$cil->id)}}" style="color: red">{{$cil->name}}</a></h3>
-                  @elseif($cil->description=="consultorio")
-                  <h3 style="" ><a  href="{{url('ficha-clinica')}}" style="color: red">{{$cil->name}}</a></h3>
                   @else
                   <h3 style="" ><a  href="{{url('vendasindex',$cil->id)}}" style="color: red">{{$cil->name}}</a></h3>
                   @endif
                   
                 @else
 
-                  @if($cil->description=="banho")
+                  @if($cil->description=="car")
                   <h3><a  href="{{url('carindex',$cil->id)}}" style="color: #FFFFFF">{{$cil->name}}</a></h3>
-                  @elseif($cil->description=="consultorio")
-                  <h3><a  href="{{url('ficha-clinica')}}" style="color: #FFFFFF">{{$cil->name}}</a></h3>
                   @else
                   <h3><a  href="{{url('vendasindex',$cil->id)}}" style="color: #FFFFFF">{{$cil->name}}</a></h3>
                   @endif  
@@ -46,10 +40,8 @@
                 <p>{{$cil->updated_at->diffForHumans()}}</p>
               </div>
               <div class="icon">
-                @if($cil->description=="banho")
-                <i class="fa fa-shower"></i>
-                @elseif($cil->description=="consultorio")
-                <i class="fa fa-stethoscope"></i>
+                @if($cil->description=="car")
+                <i class="fa fa-car"></i>
                 @else
                 <i class="fa fa-shopping-cart"></i>
                 @endif
@@ -65,7 +57,7 @@
         </div>
         @endforeach
     @endif
-</div>
+
 
         <!--modal edite Mesa-->
         <div class="modal fade bd-example-modal-lg" id="ticket-edit-mesa-modal" tabindex="-1" role="dialog" aria-labelledby="ticket-edit-mesa-modal-Label">
@@ -84,7 +76,6 @@
                               <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                   <li class="active"><a href="#tab_1" data-toggle="tab">Lista de Pedidos</a></li>
-                                  <!--
                                   <li><a href="#tab_2" data-toggle="tab">Contas a Pagar</a></li>
                                   <li><a href="#tab_3" data-toggle="tab">Contas Pagas</a></li>
                                   <li class="dropdown">
@@ -100,7 +91,6 @@
                                     </ul>
                                   </li>
                                   <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
-                                -->
                                 </ul>
                                 <div class="tab-content">
                                   <div class="tab-pane active" id="tab_1">

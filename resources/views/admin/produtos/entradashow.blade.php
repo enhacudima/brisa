@@ -1,19 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Edit Entrada')
+@section('title', 'BM | Editar entrada de Produto')
 
-@section('content_header')    
-    <h1><a class="btn btn-social-icon btn-github"  href="{{ url()->previous() }}"><i class="fa  fa-arrow-left"></i></a>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="{{ url('home') }}"><i class="fa fa-home"></i> Home</a></li>
-        <li class=""><a href="{{ url('produto') }}">Produtos</a></li>
-        <li class=""><a href="{{ url('produto_entrada') }}">Entradas</a></li>
-        <li class="active">Show</li>
-    </ol>
+@section('content_header')
+    <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -22,7 +16,7 @@
     <div class="panel panel-default">
 
     <div class="panel-heading">
-        <h4>Edit Entrada: {{$produtos[0]->lot}}
+        <h4>Editar entrada de Produto lote: {{$produtos[0]->lot}}
         </h4>
     </div>
 
@@ -37,75 +31,32 @@
             <div class="row">
                     <div class="from-group col-lg-12">
                         <label>Produto</label>
-                        <input type="text" value="{{$produtos[0]->name}}">
-                        <input type="text" name="produto_id" id="produto_id" value="{{$produtos[0]->produto_id}}" hidden="">
-                    </div>
-            </div>
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Tipo de unidade de medida</label>
-                        <input   value="{{$produtos[0]->tipodeunidadedemedida}}" disabled="">
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Unidade de Medida</label>
-                        <input   value="{{$produtos[0]->unidadedemedida}}" disabled="">
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Quantidade</label>
-                        <input step="any" type="number"  name="quantidade" id="quantidade" class="form-control quantidade" value="{{$produtos[0]->quantidade}}" required autofocus>
+                        <select name="produto_id" id="produto_id" class="form-control" value="{{old('produto')}}" required autofocus>
+                            @if(isset($produtos))
+                          
+                            <option value="{{$produtos[0]->produto_id}}">{{$produtos[0]->name}}</option>
+                        
+                            @endif
+                        </select>
                     </div>
             </div> 
             <div class="row">
                     <div class="from-group col-lg-12">
-                        <label>Custo Total de aquisição</label>
-                        <input step="any" type="number" name="precodecompra" id="precodecompra" class="form-control precodecompra" value="{{$produtos[0]->precodecompra}}"  autofocus>
+                        <label>Quantidade</label>
+                        <input type="number" name="quantidade" id="quantidade" class="form-control" value="{{$produtos[0]->quantidade}}" required autofocus>
+                    </div>
+            </div> 
+            <div class="row">
+                    <div class="from-group col-lg-12">
+                        <label>Preço de Compra</label>
+                        <input type="number" name="precodecompra" id="precodecompra" class="form-control" value="{{$produtos[0]->precodecompra}}"  autofocus>
                     </div>
             </div> 
 
             <div class="row">
                     <div class="from-group col-lg-12">
                         <label>Margem (%)</label>
-                        <input  step="any" type="number" name="margem_per" id="margem_per" class="form-control" value="{{$produtos[0]->margem_per}}" required autofocus>
-                    </div>
-            </div> 
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Preço de revenda</label>
-                        <input step="any" type="number"  name="final_p" id="final_p" class="form-control final_p" value="{{$produtos[0]->preco_final}}" required autofocus >
-                    </div>
-            </div>
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Data Expiração</label>
-                        <input  type="date" name="data_exp"  class="form-control " value="{{$produtos[0]->data_exp}}"  >
-                    </div>
-            </div> 
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Fornecedor</label>
-                        <input  type="text" name="fornecedor"  class="form-control " value="{{$produtos[0]->fornecedor}}"  >
-                    </div>
-            </div> 
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Telefone Fornecedor</label>
-                        <input  type="number" name="telefone"  class="form-control " value="{{$produtos[0]->telefone}}"  >
-                    </div>
-            </div> 
-
-            <div class="row">
-                    <div class="from-group col-lg-12">
-                        <label>Email Fornecedor</label>
-                        <input  type="Email" name="email_fornecedor"  class="form-control " value="{{$produtos[0]->email_fornecedor}}"  >
+                        <input type="number" name="margem_per" id="margem_per" class="form-control" value="{{$produtos[0]->margem_per}}" required autofocus>
                     </div>
             </div>       
 
@@ -142,7 +93,6 @@
 </div>
 
 </div>
-<input type="hidden" id="unidadedemedida" value="{{$produtos[0]->unidadedemedida}}">
     <script>
          
     $(document).ready(function() {
@@ -163,76 +113,6 @@
         } );
     } );
     </script>
-
-    <script>
-    $('#margem_per').keyup(function(){
-        var quantidade =   parseFloat($('#quantidade').val());
-        var precodecompra =  parseFloat($('#precodecompra').val());
-        var margem_per = parseFloat($('#margem_per').val());
-        var unidadedemedida = parseFloat($('#unidadedemedida').val());
-     
-        $custo_unitario=(precodecompra/quantidade/unidadedemedida);
-        $margem=$custo_unitario*(margem_per/100);
-        $preco_final=$custo_unitario+$margem;
-
-         $('#final_p').val(roundN($preco_final,2)); 
-
-    });
-
-
-    $('#quantidade').keyup(function(){
-        var quantidade =   parseFloat($('#quantidade').val());
-        var precodecompra =  parseFloat($('#precodecompra').val());
-        var margem_per = parseFloat($('#margem_per').val());
-        var unidadedemedida = parseFloat($('#unidadedemedida').val());
-        console.log(unidadedemedida);
-     
-        $custo_unitario=(precodecompra/quantidade/unidadedemedida);
-        $margem=$custo_unitario*(margem_per/100);
-        $preco_final=$custo_unitario+$margem;
-
-         $('#final_p').val(roundN($preco_final,2)); 
-
-    });
-
-
-    $('#precodecompra').keyup(function(){
-        var quantidade =   parseFloat($('#quantidade').val());
-        var precodecompra =  parseFloat($('#precodecompra').val());
-        var margem_per = parseFloat($('#margem_per').val());
-        var unidadedemedida = parseFloat($('#unidadedemedida').val());
-     
-        $custo_unitario=(precodecompra/quantidade/unidadedemedida);
-        $margem=$custo_unitario*(margem_per/100);
-        $preco_final=$custo_unitario+$margem;
-        
-       $('#final_p').val(roundN($preco_final,2)); 
-
-    });
-
-    $('#final_p').keyup(function(){       
-        var quantidade =   parseFloat($('#quantidade').val());
-        var precodecompra =  parseFloat($('#precodecompra').val());
-        var custo_unitario = parseFloat($('#final_p').val());
-        var unidadedemedida = parseFloat($('#unidadedemedida').val());
-     
-        var E2=custo_unitario;
-        var B2=quantidade*unidadedemedida;
-        var C2=precodecompra;
-
-        $preco_final=(((E2*B2)-C2)/C2)*100;
-
-       $('#margem_per').val(roundN($preco_final,5)); 
-
-    });
-
-
-    function roundN(num,n){
-      return parseFloat(Math.round(num * Math.pow(10, n)) /Math.pow(10,n)).toFixed(n);
-    }
-    
-    </script>
-
 @stop
 
 

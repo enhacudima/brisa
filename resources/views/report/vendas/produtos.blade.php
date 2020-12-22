@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Report Produtos')
+@section('title', 'BM | Report Produtos')
 
 @section('content_header')
     <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 

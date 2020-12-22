@@ -12,10 +12,4 @@ class CarTemp extends Model
     public $primaryKey = 'id';
 
     public $timestamps=true;
-
-     	public function paciente ()
- 	{
- 		return $this->belongsTo('App\Paciente','car_id','id');
- 	}
-
 }

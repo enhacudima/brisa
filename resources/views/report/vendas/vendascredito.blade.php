@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Report Venda a Credito')
+@section('title', 'BM | Report Venda a Credito')
 
 @section('content_header')
     <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -590,11 +591,11 @@
 
         </script> 
 
-        <script type="text/javascript">
+                    <script type="text/javascript">
                 
             $(document).ready(function(){
 
-                $('.valor').keyup(function(){
+                $('.valor').change(function(){
 
                      var total=$('[name="valor[]"]')
                      var __total=[];
@@ -622,7 +623,6 @@
 
                     });
             });
-            
             </script>
 
 

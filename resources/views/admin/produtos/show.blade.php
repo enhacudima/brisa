@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Cadastro de Produtos')
+@section('title', 'BM | Cadastro de Produtos')
 
 @section('content_header')
-    <h1>Produtos</h1>
+    <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -21,66 +22,60 @@
 
     <div class="panel-body">
         <div class="col-lg-3 col-lg-offset-4">
-        <form method="post" action="{{url('produto/update',$produtos->id)}}" autocomplete="Active" accept-charset="UTF-8" enctype="multipart/form-data">
+        <form method="post" action="{{url('produto/update',$produtos->id)}}" autocomplete="Active" accept-charset="UTF-8" >
             {{ csrf_field() }}
 
             <input   name="idusuario" type="hidden" id="idusuario" value="{{ Auth::user()->id }}" required autofocus>
              @if(isset($produtos))  
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Nome</label>
                         <input type="text" name="name" id="name" class="form-control" value="{{$produtos->name}}" required autofocus>
                     </div>
             </div> 
             <div class="row">
-                    <div class="from-group ">
-                        <label>Peso Liquido em Kg</label>
-                        <input type="text" name="peso" id="peso" class="form-control"  value="{{$produtos->peso}}" >
-                    </div>
-            </div> 
-            <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Codigo do Produto</label>
                         <input type="text" name="codigoproduto" id="codigoproduto" class="form-control" value="{{$produtos->codigoproduto}}" required autofocus>
                     </div>
             </div> 
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Codigo de Barras</label>
                         <input type="text" name="codigobarra" id="codigobarra" class="form-control" value="{{$produtos->codigobarra}}"  autofocus>
                     </div>
             </div> 
 
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Brand</label>
                         <input type="text" name="brand" id="brand" class="form-control" value="{{$produtos->brand}}" required autofocus>
                     </div>
             </div>       
 
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Descrição</label>
                         <input type="text" name="description" id="description" class="form-control" value="{{$produtos->description}}" required autofocus>
                     </div>
             </div> 
 
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Tipo de Unidade de Medida</label>
                         <input type="text" name="tipodeunidadedemedida" id="tipodeunidadedemedida" class="form-control" value="{{$produtos->tipodeunidadedemedida}}" required autofocus>
                     </div>
             </div>  
 
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Unidade de Medida</label>
                         <input type="number" name="unidadedemedida" id="unidadedemedida" class="form-control" value="{{$produtos->unidadedemedida}}" >
                     </div>
             </div> 
             
             <div class="row">
-                    <div class="from-group ">
+                    <div class="from-group col-lg-12">
                         <label>Status</label>
                         <select name="status" id="status" class="form-control" value="{{old('status')}}" required autofocus>
                             @if($produtos->status==0)
@@ -95,23 +90,6 @@
 
                     </div>
             </div> 
-
-
-            <div class="row">
-                    <div class="from-group">
-                        <label>Stock minimo (unidade)</label>
-                        <input step="0.01" type="number" name="stock" id="stock" value="{{$produtos->stock}}" >
-                    </div>
-            </div> 
-
-            <div class="row">
-                <div class="form-group">
-                    <label>Imagem</label>
-                    <img src="{{asset('storage/'.$produtos->image)}}" style="width:200px; height:auto; clear:both; display:block;  border:1px solid #ddd; margin-bottom:10px;">
-                    <input type="file"  name="image" class="form-control">
-                </div>
-            </div>
-         
 
             <div class="row">
 

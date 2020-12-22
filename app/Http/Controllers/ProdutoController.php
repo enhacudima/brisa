@@ -7,10 +7,6 @@ use App\Produtos;
 use App\Entradas;
 use App\Ajustes;
 use DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Auth;
 
 class ProdutoController extends Controller
 {
@@ -19,18 +15,16 @@ class ProdutoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
         public function __construct()
     {
+        $this->middleware('auth');
 
-        return Auth::guard(app('VoyagerGuard'));
+
     }
 
     
     public function index()
-    {   
-      $this->authorize('produtos');
-      $produtos=Produtos::orderby('name','asc')->get();
+    {   $produtos=Produtos::get();
         return view('admin.produtos.index',compact('produtos'));
     }
 
@@ -53,33 +47,18 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-      $this->authorize('store_produtos');
         $this->validate($request, [
-            'name'=>'required|min:3|unique:produtos,name|max:192',
-            'codigoproduto'=>'required|max:192|unique:produtos,codigoproduto',
-            'codigobarra'=>'required|max:192|unique:produtos,codigobarra',
+            'name'=>'required|min:3',
+            'codigoproduto'=>'required',
+            'codigobarra'=>'required|max:192',
             'brand'=>'required|max:192',
             'description'=>'required|string|max:192',
             'tipodeunidadedemedida'=>'required|string|max:192',
-            'unidadedemedida'=>'required|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'stock'=>'required|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'peso'=>'nullable|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5000'
+            'unidadedemedida'=>'required|regex:/^\d+(\.\d{1,2})?$/',
 
         ]);
 
-      $file_name="product/default.jpg";
-      if (isset($request->image))
-      {
-          $file_name='product/'.time() .'.'. $request->file('image')->getClientOriginalExtension();
-          $request->image->storeAs('public', $file_name); 
-          
-      }
-        $data=$request->all();
-        $data['image']=$file_name;
-        
-        
-        Produtos::create($data);
+        Produtos::create($request->all());
 
         return back()->with('success','Successfully Added to List');
     }
@@ -92,8 +71,6 @@ class ProdutoController extends Controller
      */
     public function show($id)
     {
-      $this->authorize('show_produtos');
-
         $produtos=Produtos::find($id);
         return view ('admin.produtos.show',compact('produtos'));    
     }
@@ -119,45 +96,24 @@ class ProdutoController extends Controller
     public function update(Request $request, $id)
     {
         
-      $this->authorize('edit_produtos');
 
         $produtos=request()->except(['_token']);
             $this->validate($request, [
-            'name'=>['nullable','min:3','max:192',Rule::unique('produtos','name')->ignore($id,'id')],
-            'codigoproduto'=>['required','max:192',Rule::unique('produtos','codigoproduto')->ignore($id,'id')],
-            'codigobarra'=>['nullable','max:192',Rule::unique('produtos','codigobarra')->ignore($id,'id')],
-            'brand'=>'nullable|max:192',
-            'description'=>'nullable|string|max:192',
-            'tipodeunidadedemedida'=>'nullable|string|max:192',
-            'unidadedemedida'=>'nullable|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'peso'=>'nullable|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'stock'=>'nullable|regex:/^\d+(\.\d{1,2})?$/|numeric',
-            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5000',
+            'name'=>'required|min:3',
+            'codigoproduto'=>'required',
+            'codigobarra'=>'required|max:192',
+            'brand'=>'required|max:192',
+            'description'=>'required|string|max:192',
+            'tipodeunidadedemedida'=>'required|string|max:192',
+            'unidadedemedida'=>'required|regex:/^\d+(\.\d{1,2})?$/',
             'status'=>'required',
 
         ]);
-      $produtos=Produtos::find($id);
-      $file_name=$produtos->image;
-      if (isset($request->image))
-      {
 
-        $newFilename=$request->file('image')->getClientOriginalName();
 
-          if ($produtos->image!="product/default.jpg") {
-              
-            Storage::delete('/public/'.$produtos->image);
-          }
-            $file_name='product/'.time() .'.'. $request->file('image')->getClientOriginalExtension();
-            $request->image->storeAs('public', $file_name); 
-          
-
-          
-      }
-        $data=$request->except(['_token']);
-        $data['image']=$file_name;
         
         Produtos::where('id',$id)
-                ->update($data);
+                ->update($produtos);
 
         return back()->with('success','Successfully Updated');
         
@@ -177,36 +133,19 @@ class ProdutoController extends Controller
     }
 
     public function entradaindex(){
-      $this->authorize('entradas');
-        $produtos=Produtos::orderby('name','asc')->where('status',1)->get();
+        $produtos=Produtos::all();
         $entradas=Entradas::join('produtos','produtos_entradas.produto_id','produtos.id')
-                            ->select('produtos_entradas.*','produtos.name','produtos.tipodeunidadedemedida','produtos.unidadedemedida','produtos.codigoproduto','produtos.image')
-                            ->orderby('produtos.name','asc')
+                            ->select('produtos_entradas.*','produtos.name')
                             ->get();
         return view('admin.produtos.entradaindex', compact('produtos','entradas'));
     }
 
     public function entradastore(Request $request)
     {
-        
-      $this->authorize('store_entradas');
-
-        $this->validate($request,[
-          'produto_id'=>'required',
-          'quantidade'=>'required',
-          'precodecompra'=>'required|numeric',
-          'margem_per'=>'required|numeric',
-          'quantidade'=>'required|numeric',
-          'data_exp'=>'nullable|date',
-          'fornecedor'=>'nullable|string|max:255',
-          'telefone'=>'nullable|numeric',
-          'email_fornecedor'=>'nullable|email',
-          'final_p' =>'required|numeric',
-        ]);
         $produto=Produtos::find($request->produto_id);
         $entrada= new Entradas;
         $entrada->produto_id=$request->produto_id;
-        $entrada->lot=time();
+        $entrada->lot="Produt-Lot-".time();
         $entrada->quantidade=$request->quantidade;
         $entrada->precodecompra=$request->precodecompra;
         $entrada->margem_per=$request->margem_per;
@@ -214,14 +153,9 @@ class ProdutoController extends Controller
         $entrada->quantidade_unitaria=$request->quantidade*$produto->unidadedemedida;
         $entrada->custo_unitario=($request->precodecompra/$request->quantidade/$produto->unidadedemedida);
         $entrada->margem=$entrada->custo_unitario*($request->margem_per/100);
-        $entrada->preco_final=$request->final_p;
+        $entrada->preco_final=$entrada->custo_unitario+$entrada->margem;
 
-        
-        $entrada->data_exp=$request->data_exp;
-        $entrada->fornecedor=$request->fornecedor;
-        $entrada->telefone=$request->telefone;
-        $entrada->email_fornecedor=$request->email_fornecedor;
-
+       // dd($entrada);
         $entrada->save();
 
         return back()->with('success','Successfully Added');
@@ -229,14 +163,11 @@ class ProdutoController extends Controller
 
     public function ajustindex()
     {
-
-      $this->authorize('ajuste');
-
       $produtos=Produtos::all();
       $lot=Entradas::distinct('lot')->get();
       $ajustes=Ajustes::join('produtos','produtos_ajustes.produto_id','produtos.id')
                       ->join('produtos_entradas','produtos_ajustes.lot_id','produtos_entradas.id')
-                      ->select('produtos_ajustes.*','produtos_entradas.lot','produtos.name','produtos.tipodeunidadedemedida','produtos.unidadedemedida','produtos.codigoproduto','produtos.image')
+                      ->select('produtos_ajustes.*','produtos_entradas.lot','produtos.name')
                       ->get();
       
       return view('admin.produtos.ajustindex',compact('produtos','lot','ajustes'));  
@@ -263,9 +194,7 @@ class ProdutoController extends Controller
     }
 
     public function ajustestore(Request $request)
-    {     
-       $this->authorize('store_ajuste');  
-
+    {       
         $data=$request->all();
         $this->validate($request, [
             'produto_id'=>'required',
@@ -283,33 +212,16 @@ class ProdutoController extends Controller
 
     public function lotshow($id)
     {   
-       $this->authorize('show_lot');
-
         $produtos=Entradas::join('produtos','produtos_entradas.produto_id','produtos.id')
                             ->where('produtos_entradas.id',$id)
-                            ->select('produtos_entradas.*','produtos.name','produtos.unidadedemedida')
+                            ->select('produtos_entradas.*','produtos.name')
                             ->get();
-
-        return view('admin.produtos.entradashow',compact('produtos'));
+       //dd($produtos[0]->status);
+        return view('admin.Produtos.entradashow',compact('produtos'));
     }
 
     public function loteupdate (Request $request)
     {   
-         $this->authorize('edit_lot');
-
-        $this->validate($request,[
-          'produto_id'=>'required',
-          'quantidade'=>'required',
-          'precodecompra'=>'required|numeric',
-          'margem_per'=>'required|numeric',
-          'quantidade'=>'required|numeric',
-          'data_exp'=>'nullable|date',
-          'fornecedor'=>'nullable|string|max:255',
-          'telefone'=>'nullable|numeric',
-          'email_fornecedor'=>'nullable|email',
-          'final_p' =>'required|numeric',
-        ]);
-
         $produto=Produtos::find($request->produto_id);
         $entrada= new Entradas;
         $quantidade=$entrada->quantidade=$request->quantidade;
@@ -319,33 +231,26 @@ class ProdutoController extends Controller
         $quantidade_unitaria=$entrada->quantidade_unitaria=$request->quantidade*$produto->unidadedemedida;
         $custo_unitario=$entrada->custo_unitario=($request->precodecompra/$request->quantidade/$produto->unidadedemedida);
         $margem=$entrada->margem=$entrada->custo_unitario*($request->margem_per/100);
-        $preco_final=$entrada->preco_final=$request->final_p;
+        $preco_final=$entrada->preco_final=$entrada->custo_unitario+$entrada->margem;
         $status=$entrada->status=$request->status;
 
-        $data_exp=$request->data_exp;
-        $fornecedor=$request->fornecedor;
-        $telefone=$request->telefone;
-        $email_fornecedor=$request->email_fornecedor;
 
         $temp_name=Entradas::where('produto_id',$request->produto_id)->get();
-        
+        //dd($status);
         $ver=0;
         if ($status==1) 
         {
-          Entradas::where('produto_id',$request->produto_id)
-                    ->where('status',1)
-                    ->update([
-                      'status' => 0,
-                    ]);
-            /*foreach ($temp_name as $value) {
+            foreach ($temp_name as $value) {
+                //dd($value->status);
             if ($value->status==1) { 
+                //dd($value->status);
                 $ver=$value->status;
             }    
             }
-            
+            //dd($ver);
             if ($ver==1){
             return back()->with('error','Não pode activar mas de 1 produto com mesmo nome');
-              };*/
+                };
         };
           
 
@@ -362,13 +267,9 @@ class ProdutoController extends Controller
                         'margem'=>$margem,
                         'preco_final'=>$preco_final,
                         'status'=>$status,
-                        'data_exp'=>$data_exp,
-                        'fornecedor'=>$fornecedor,
-                        'telefone'=>$telefone,
-                        'email_fornecedor'=>$email_fornecedor,
                     ]);
 
-        return redirect('produto_entrada')->with('success','Successfully update');
+        return $this->entradaindex()->with('success','Successfully update');
 
         
 
@@ -376,11 +277,5 @@ class ProdutoController extends Controller
 
 
 
-    }
-    public function getprodut(Request $request)
-    {
-        $produto = Produtos::find($request->id);
-
-        return response()->json($produto);
     }
 }

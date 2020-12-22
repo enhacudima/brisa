@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mesa;
-use Auth;
 
 class MesaController extends Controller
 {
@@ -15,18 +14,16 @@ class MesaController extends Controller
      */
 
 
-    
         public function __construct()
     {
+        $this->middleware('auth');
 
-        return Auth::guard(app('VoyagerGuard'));
+
     }
 
     
     public function index()
-    {   
-        $this->authorize('mesa');
-        $mesas=Mesa::get();
+    {   $mesas=Mesa::get();
         return view ('admin.mesa.index',compact('mesas'));
     }
 
@@ -48,10 +45,9 @@ class MesaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('mesa');
         $data=$request->all();
         $this->validate($request, [
-            'name'=>'required|string|min:3|max:50|unique:mesa,name',
+            'name'=>'required',
             'description'=>'required',
             ]);
 
@@ -67,8 +63,7 @@ class MesaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {   $this->authorize('mesa');
-
+    {
         $mesa=Mesa::find($id);
        // dd($mesa);
         return view ('admin.mesa.show',compact('mesa'));   
@@ -105,12 +100,7 @@ class MesaController extends Controller
      */
     public function updatemesa(Request $request)
     {    
-        $this->authorize('mesa');
-               
         $mesa=request()->except(['_token']);
-        $this->validate($request, [
-            'name'=>'required|string|min:3|max:50|unique:mesa,name',
-            ]);
           
         Mesa::where('id',$mesa['id'])
                 ->update($mesa);

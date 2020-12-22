@@ -4,51 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
-use Auth;
 
 class ClienteController extends Controller
 {
 
-    
-        public function __construct()
+	    public function __construct()
     {
+        $this->middleware('auth');
 
-        return Auth::guard(app('VoyagerGuard'));
+
     }
     
 
     public function indexcliente()
     {
-    	$this->authorize('cliente');
-        $cliente=Cliente::get();
+    	$cliente=Cliente::get();
     	return view('admin.cliente.index',compact('cliente'));
     }
 
     public function clienteshow($id)
     {
-
-        $this->authorize('show_cliente');
-
-    	$client=Cliente::with('pacientes')->find($id);
+    	$client=Cliente::find($id);
 
     	return view('admin.cliente.show',compact('client'));
     }
 
         public function storcliente(Request $request)
     {
-
-        $this->authorize('store_cliente');
-
     	$data=$request->all();
     	$this->validate($request, [
-            'nome'=>'required|min:3|max:50|string',
+            'name'=>'required|min:3|max:50|string',
             'user_id'=>'required',
-            'apelido'=>'required|min:3|max:50|string',
-            'endereco'=> 'nullable|min:5|max:255|string',
-            'contacto1'=>'nullable|digits:9|unique:cliente',
-            'contacto2'=>'nullable|digits:9',
-            'email'=>'nullable|string|unique:cliente',
-            'nuit'=>'nullable|digits:9'
+            'sname'=>'required|min:3|max:50|string',
+            'morada'=> 'required|min:5|max:100|string',
+            'data_nasce'=>'required|min:3|date',
+            'contacto1'=>'required|min:9|max:9|unique:cliente',
+            'contacto2'=>'max:9|unique:cliente',
+            'credito'=>'required|string',
+
             ]);
 
 
@@ -58,22 +51,19 @@ class ClienteController extends Controller
     }
         public function updatecliente(Request $request)
     {	
-
-
-        $this->authorize('update_cliente');
-        
     	$data=$request->all();
     	$cliente=cliente::find($data['id']);
 
     	$newdata=$this->validate($request, [
-            'nome'=>'required|min:3|max:50|string',
+            'name'=>'required|min:3|max:50|string',
             'user_id'=>'required',
-            'apelido'=>'required|min:3|max:50|string',
-            'endereco'=> 'nullable|min:5|max:100|string',
-            'contacto1'=>'nullable|digits:9',
-            'contacto2'=>'nullable|digits:9',
-            'email'=>'nullable|string',
-            'nuit'=>'nullable|digits:9'
+            'sname'=>'required|min:3|max:50|string',
+            'morada'=> 'required|min:5|max:100|string',
+            'data_nasce'=>'required|min:3|date',
+            'contacto1'=>'required|min:9|max:9',
+            'contacto2'=>'max:9',
+            'credito'=>'required|string',
+
             ]);
 
     	$cliente->update($newdata);
@@ -86,7 +76,6 @@ class ClienteController extends Controller
         public function searchcliente(Request $request)
     {   
          
-        $this->authorize('search_cliente');
 
 
         $term = $request->get('search');
@@ -95,13 +84,13 @@ class ClienteController extends Controller
  
             // search loan  by loanid or nuit
             $clientes = Cliente::where('contacto1', 'LIKE', '%' . $term .'%')
+            				->where('credito', 'sim')
                             ->orWhere('contacto2', 'LIKE', '%' . $term .'%')
-                            ->orwhere('nome','LIKE','%'.$term.'%')
-                            ->orwhere('apelido','LIKE','%'.$term.'%')
+                            ->orwhere('name','LIKE','%'.$term.'%')
                             ->get();
  
             foreach ($clientes as $cliente) {
-                $cliente->label   = $cliente->nome.' '.$cliente->apelido . ' (' . $cliente->contacto1 .')';
+                $cliente->label   = $cliente->name.' '.$cliente->sname . ' (' . $cliente->contacto1 .' & '.$cliente->contacto2. ')';
             }
  
             return $clientes;

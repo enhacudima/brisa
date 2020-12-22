@@ -1,12 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ' | Report Venda a Credito')
+@section('title', 'BM | Report Venda a Credito')
 
 @section('content_header')
     <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -15,7 +16,7 @@
     <div class="panel panel-default">
 
     <div class="panel-heading">
-        <h4>Report Banho
+        <h4>Report Venda a credito
         </h4>
     </div>
 
@@ -43,7 +44,7 @@
 
         </div>
 
-        <div class="form-group  col-sm-2  "><br>
+        <div class="">
         <p class="submit col">
             <strong>
             <button type="submit" class="btnEmidio btn btn-primary bord0" value="1" id="gravar">Atualizar </button>
@@ -65,7 +66,7 @@
     <div class="panel panel-default">
 
     <div class="panel-heading">
-        <h4>Vendas
+        <h4>Vendas a Credito
         </h4>
     </div>
 
@@ -75,13 +76,10 @@
         <table id="reclatodas" class="table table-striped  table-hover" cellspacing="0" width="100%">
             <thead >
             <tr>
-                <th scope="col">Cliente Nome</th>
-                <th scope="col">Cliente Apelido</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Apelido</th>
                 <th scope="col">Contacto</th>
-                <th scope="col">Caderneta</th>
-                <th scope="col">Número da Ficha</th>
-                <th scope="col">Paciente</th>
-                <th scope="col">Raça</th>
+                <th scope="col">Matricula</th>
                 <th scope="col">Data</th>
                 <th scope="col">Produto</th>
                 <th scope="col">Quantidade</th>
@@ -94,13 +92,10 @@
  
             @foreach($venda as $cil)
                 <tr>
-                <td>{{$cil->cliente_nome}}</td> 
-                <td>{{$cil->apelido}}</td> 
+                <td>{{$cil->car_name}}</td> 
+                <td>{{$cil->car_sname}}</td> 
                 <td>{{$cil->contacto1}} & {{$cil->contacto2}}</td>
-                <td>{{$cil->caderneta}}</td>
-                <td>{{$cil->numero_ficha}}</td>
-                <td>{{$cil->nome}}</td> 
-                <td>{{$cil->raca}}</td> 
+                <td>{{$cil->matricula}}</td> 
                 <td>{{$cil->created_at}}</td>
                 <td>{{$cil->name}}</td>
                 <td>{{$cil->quantidade}}</td>

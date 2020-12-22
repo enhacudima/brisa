@@ -1,38 +1,36 @@
 @extends('adminlte::page')
 
-@section('title', ' | Cadastro de Nova entrada de Produtos')
+@section('title', 'BM | Cadastro de Nova entrada de Produtos')
 
 @section('content_header')
-    <h1><a class="btn btn-social-icon btn-github"  href="{{ url()->previous() }}"><i class="fa  fa-arrow-left"></i></a>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="{{ url('home') }}"><i class="fa fa-home"></i> Home</a></li>
-        <li class="">Produtos</li>
-        <li class="active">Ajuste</li>
-    </ol>
+    <h1>Settings</h1>
 @stop
 
 @section('content')
+@include('inc.messages')
 
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!--model-->
-<div class="modal fade bd-example-modal-lg" id="modal-default"  tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">Novo ajuste</h4>
-      </div>
-      
-        <form method="post" action="{{{url('store_produto_ajuste')}}}" autocomplete="Active" accept-charset="UTF-8" enctype="multipart/form-data" style="margin:15px">
-            <div class="modal-body">
+
+
+<div class="">
+    <div class="">
+    <div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h4>Novo Ajuste de Produto
+        </h4>
+    </div>
+
+    <div class="panel-body">
+        <div class="col-lg-4">
+        <form method="post" action="{{{url('store_produto_ajuste')}}}" autocomplete="Active" accept-charset="UTF-8" >
             {{ csrf_field() }}
+
             <input   name="idusuario" type="hidden" id="idusuario" value="{{ Auth::user()->id }}" required autofocus>
             <input   name="tipo" type="hidden" id="tipo" value="ajuste" required autofocus>
-
-                    <div class="row">
+            <div class="row">
+                <div class="row">
                     <div class="from-group col-lg-12">
                         <label>Produto</label>
                         <select name="produto_id" id="produto_id" class="form-control" value="{{old('produto')}}" required autofocus>
@@ -55,7 +53,7 @@
                     </div>
                     <div class="from-group col-lg-6">
                         <label>Quantidade unit</label>
-                        <input step="any" type="number"  name="quantidade_unidade" id="quantidade_unidade" class="form-control" value="{{old('quantidade_unidade')}}" required autofocus>
+                        <input step="0.01" type="number" name="quantidade_unidade" id="quantidade_unidade" class="form-control" value="{{old('quantidade_unidade')}}" required autofocus>
                     </div>
                 </div>
 
@@ -66,31 +64,29 @@
                         <textarea type="textarea" name="decricao" id="decricao" class="form-control" value="{{old('decricao')}}"  autofocus></textarea>
                     </div>
                 </div>
-          
+            <div class="row">
+
+                <div class=" col-lg-12">
+                     <label></label>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
+            </div>   
+            </div> 
+            
+
+                
+           
+        </form>
         
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div>
-      </form>
 
     </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
+    
 
-
-
-
-    <div class="col-lg-12">
+    <div class="col-lg-8">
     <div class="panel panel-default">
 
     <div class="panel-heading">
-        <h4><button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-default">
-                Novo Ajuste
-              </button>
+        <h4>Lista de ajustes
         </h4>
     </div>
 
@@ -101,7 +97,6 @@
             <thead >
             <tr>
                 <th scope="col">#</th>
-                <th>Imagem</th>
                 <th scope="col">Produto</th>
                 <th scope="col">Lot</th>
                 <th scope="col">Quantidade</th>
@@ -115,8 +110,6 @@
             @foreach($ajustes as $cil)
                 <tr>
                  <td>{{$cil->id}}</td>
-                 <td><img src="{{asset('storage/'.$cil->image)}}" style="width:80px;  clear:both; display:block;  border:1px solid #ddd; margin-bottom:10px;"></td>
-                 <td> 
                  <td>             <a class="btn btn btn-success btn-xs" href="{{action('ProdutoController@show', $cil->produto_id)}}">
                     <i class="fa fa-pencil fa-fw"></i> {{$cil->name}}
                  </a>
@@ -134,6 +127,9 @@
       </div>  
         </div>
     </div>
+</div>
+</div>
+
 </div>
 
 @section('js')

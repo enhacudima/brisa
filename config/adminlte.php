@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'title' => '',
+    'title' => 'BMVendaS',
 
-    'title_prefix' => 'Pelos & Patas',
+    'title_prefix' => '',
 
     'title_postfix' => '',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Pelos</b>Patas',
+    'logo' => '<b>BM</b>VendaS',
 
-    'logo_mini' => '<b>P</b>P',
+    'logo_mini' => '<b>B</b>V',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'blue-light',
+    'skin' => 'blue',
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'collapse_sidebar' => false,
+    'collapse_sidebar' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -109,174 +109,105 @@ return [
 
     'menu' => [
         'MAIN NAVIGATION',
-        [  
-            'text' => 'Home',
-            'icon' => 'home',
-            'url'  => 'home',
-        ],
         [
-            'text'    => 'Dashboard',
-            'icon'    => 'heartbeat',
-            'url'     => 'chart-line',
-            'can'     => 'dashboard',    
-        ],
-        [
-            'text'   => 'Clientes',
-            'icon'   => 'user-o',
-            'submenu'=> [
-                            [
-                                'text'=>'Cliente',
-                                'url' =>'index_cliente',
-                                'icon'=>'user-plus',
-                                'can'     => 'Cliente',   
-
-                            ],
-                            [
-                                'text'=>'Pacientes',
-                                'url' =>'paciente',
-                                'icon'=>'paw',
-                                'can'     => 'paciente',   
-                            ]      
-                        ]
-        ], 
-        [
-            'text'    => 'Eventos',
-            'icon'    => 'calendar',
-            'url'     => 'calendario',  
-            'can'     => 'calendarios',   
-        ],
-        [
-            'text'        => 'Messagens',
-            'url'         => 'email/all',
-            'icon'        => 'envelope-open',
-            'can'         => 'emails',  
-        ],        
-        [
-            
-            'text'        => 'Extract',
-            'url'         => 'report/index',
-            'icon'        => 'long-arrow-down',
-            'submenu'     => [
+            'text'    => 'Menu',
+            'icon'    => 'th',
+            'submenu' => [
                 [
-                    'text'  => 'My Reports',
-                    'url'   => 'report/index',
-                    'icon'  => 'warning',
-
+                    'text' => 'Home',
+                    'icon' => 'home',
+                    'url'  => 'home',
                 ],
-                [
-                    'text'  => 'New Report',
-                    'url'   => 'report/new',
-                    'icon'  => 'file-text-o',
-                    'can'   => 'report',
-
-                ],
-            ]
+            ],
         ],
+        'Outros',
         [
-        'text' => 'Reporte',
-        'icon' => 'bar-chart',
-        'can'  => 'report',
-        'submenu'=>[
-                    [
-                     'text'=> 'Movimentos',
-                     'url'  => 'report_produt',
-                            
-                    ],
-                    [
-                     'text'=> 'Stock Atual',
-                     'url'  => 'report_stock_atual',
-                            
-                    ],
-                    [ 
-                        'text' => 'Vendas',
-                        'submenu' =>[      
-                                        [
-                                         'text'=> 'Facturas',
-                                         'url'  => 'vendas_facturas ',
-                                                
-                                        ], 
-                                        [
-                                         'text'=> 'Inflow',
-                                         'url'  => 'report_inflow',
-                                                
-                                        ],   
-                                        [
-                                         'text'=> 'Tipo de Pagamento',
-                                         'url'  => 'report_pagamento',
-                                                
-                                        ],                                        
-                                        [
-                                         'text'=> 'Produtos',
-                                         'url'  => 'report_produto_venda',
-                                                
-                                        ],  
-                                        [
-                                         'text'=> 'Auditar',
-                                         'url'  => 'report_auditar',
-                                                
-                                        ],  
-                                        [
-                                         'text'=> 'Vendas a Credito',
-                                         'url'  => 'report_vendacredito',
-                                                
-                                        ],   
-                                        [
-                                         'text'=> 'Detalhes Banho ',
-                                         'url'  => 'report_vendacar',
-                                                
-                                        ],                 
-
-                                    ]
-
-                    ]                                          
-                   ]
-    ],
-
-        'Administração',
-        [
-            'text'       => 'Produtos',
-            'icon'       => 'shopping-bag',
+            'text'       => 'Admin',
+            'icon'       =>'cog',
+            'url'        => 'admin',
             'submenu'    => [
-                            
-                                [
-                                    'text' => 'Cadastro',
-                                    'url'  => 'produto',
-                                    'icon' => 'plus-square-o',
-                                    'can'  => 'produtos',
-                                ],
-                                [
-                                    'text' => 'Entradas',
-                                    'url'  => 'produto_entrada',
-                                    'can'  => 'entrada_produto',
-                                ],
-                                [
-                                    'text' => 'Ajustes',
-                                    'url'  => 'ajust_index',
-                                    'can'  => 'ajust_produto',
-                                ],
-                                        
-                            ], 
-        ],
-
-        [
-            'text'      => 'Salas',
-            'icon'      => 'folder-open',
-            'can'       => 'mesa',
-            'submenu'   => [
                             [
-                                'text' => 'Cadastro',
-                                'url'  => 'criarmesa',
+                                'text'      => 'Produtos',
+                                'submenu'   => [
+                                                [
+                                                    'text' => 'Cadastro',
+                                                    'url'  => 'produto',
+                                                ],
+                                                [
+                                                    'text' => 'Entradas',
+                                                    'url'  => 'produto_entrada',
+                                                ],
+                                                [
+                                                    'text' => 'Ajustes',
+                                                    'url'  => 'ajust_index',
+                                                ],
+                                            ],
                             ],
+                            [
+                                'text'      => 'Mesas',
+                                'submenu'   => [
+                                                [
+                                                    'text' => 'Cadastro',
+                                                    'url'  => 'criarmesa',
+                                                ],
 
-                        ],
-        ],
-    'Admin',
-        [
-            'text' => 'Configurações',
-            'icon' => 'cog',
-            'url'  => 'admin',
-            'can'  => 'browse_admin',
-            
+                                            ],
+                            ],
+                            [
+                                'text' => 'Reporte',
+                                'submenu'=>[
+                                            [
+                                             'text'=> 'Movimentos',
+                                             'url'  => 'report_produt',
+                                                    
+                                            ],
+                                            [ 
+                                                'text' => 'Vendas',
+                                                'submenu' =>[
+                                                                [
+                                                                 'text'=> 'Inflow',
+                                                                 'url'  => 'report_inflow',
+                                                                        
+                                                                ],                                          
+                                                                [
+                                                                 'text'=> 'Produtos',
+                                                                 'url'  => 'report_produto_venda',
+                                                                        
+                                                                ],  
+                                                                [
+                                                                 'text'=> 'Auditar',
+                                                                 'url'  => 'report_auditar',
+                                                                        
+                                                                ],  
+                                                                [
+                                                                 'text'=> 'Vendas a Credito',
+                                                                 'url'  => 'report_vendacredito',
+                                                                        
+                                                                ],   
+                                                                [
+                                                                 'text'=> 'Detalhes Car ',
+                                                                 'url'  => 'report_vendacar',
+                                                                        
+                                                                ],                       
+
+                                                            ]
+
+                                            ]                                          
+                                           ]
+                            ],
+                            [
+                                'text' => 'Clientes',
+                                'submenu'=> [
+                                                [
+                                                    'text'=>'Criar Cliente',
+                                                    'url' =>'index_cliente',
+                                                ]    
+                                            ]
+                            ],                            [
+                                'text' => 'Configurações',
+                                'url'  => 'admin',
+                            ],
+                        ],   
         ],
 
     ],
